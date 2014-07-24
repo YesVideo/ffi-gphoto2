@@ -102,12 +102,19 @@ module GPhoto2
       @context ||= Context.new
     end
 
-    def window
+    def window(force_load = false)
+      if force_load && @window
+        @window.finalize
+        @window = nil
+      end
+      
       @window ||= get_config
     end
 
-    def config
-      @config ||= window.flatten
+    def config(force_load = false)
+      @config = nil if force_load
+      
+      @config ||= window(force_load).flatten
     end
 
     def filesystem(root = '/')
